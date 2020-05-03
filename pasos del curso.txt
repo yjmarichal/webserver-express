@@ -1,0 +1,76 @@
+Esta es un resumen de las clases de capitulo ordenado por pasos
+1-> lo primero es crear la carpeta donde vamos a trabajar y crear el package.json con el comando npm init
+2->lo segundo seria crear el servidor esto se hace solo con poner 
+
+const http = require('http');
+http.createServer((req, res) => {
+     res.write('Hola Mundo');
+    res.end(); //esto es obligado
+    })
+    .listen(8080);
+
+3-> lo que hicimos anteriormente se puede simplificar utilizando la libreria Express
+Express se puede instalar con el comando  "npm install express --save"
+
+lo siguiente seía importar express en el el codigo de la app 
+con codigo 
+///////
+const express = require('express')
+const app = express()
+////////
+luego con el codigo que aparece en la pagina de express podemos hacer lo mismo que habian enseñado en el pundo 2 pero utilizando express
+el codigo sería 
+//////////////
+const express = require('express')
+const app = express()
+ 
+app.get('/', function (req, res) {
+  res.send('Hello World')
+})
+ 
+app.listen(3000)//este el el puerto que se puede poner 8080 o cualquiera que sea el deseado
+//////////////////
+
+//tambien es importante hacer publica la carpeta de donde van a estar las paginas con css, js y etc..
+app.use(express.static(__dirname + '/public'))
+
+//luego hay que istalar la biblioteca hbs   "npm install hbs"   esta biblioteca sirve para poder reutilizar codigos utilizarndo los archivos .hbs  parcializando los codigos que nos interesen. para utilizar los archivos parciales hay que decirle a express donde es que esta el directorio con los parciales
+
+/////
+hbs.registerPartials(__dirname + "/views/parciales");
+app.set('view engine', 'hbs');
+//////////
+
+//Express HBS engine    ----   Importante poner estas lineas de codigo luego de la app.use(express.static(__dirname + '/public'))
+hbs.registerPartials(__dirname + "/views/parciales");
+app.set('view engine', 'hbs');
+
+
+//luego en los archivos parciales o .hbs tenemos que poner los pedasos de codigo que deseamos que sean reutilizados en cada pagina.
+para luego utilizar un parcial solo hay que poner la siquiente sintaxis  
+{{> nombrehbs}}
+si quisiera utilizar una variable o helpers lo hago asi {{ nombrevariable}} igual si es un metodo o variable
+pero si el metodo tiene parametros se hace asi {{ nombre 'el texto del parametro'}}
+//los helpers no son mas que funciones que se utilizan así: 
+/////
+hbs.registerHelper('getAnno', () => {
+    return new Date().getFullYear();
+})
+////////// este por ejemplo es un helper que me devuelve el nombre
+luego para cada pagina que se este utilizando hay que hacer esto 
+////
+app.get('/nombre', (req, res) => {
+    res.render('nombre');
+})
+//// esto sirve para poder abrir las paginas y no se sepa si es html php o lo que sea
+en el vinculo donde se acceda a esta pagina solo hay que poner "/nombre"  
+no hay que espicificarle el nombre de la carpeta ni la extension porque 
+con estos codigos 
+///////
+app.use(express.static(__dirname + '/public'))
+
+//Express HBS engine    ----   Importante poner estas lineas de codigo luego de la app.use(express.static(__dirname + '/public'))
+hbs.registerPartials(__dirname + "/views/parciales");
+app.set('view engine', 'hbs');
+//////
+ya se espicifico el fichero y conoce que por default la extension es hbs
